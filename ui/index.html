@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="agent-token" content="__SESSION_TOKEN__">
+  <title>Little Cursor</title><link rel="stylesheet" href="style.css?token=__SESSION_TOKEN__">
+</head>
+<body>
+  <header><div class="brand"><span class="logo">↗</span><strong>Little Cursor</strong><span class="version">v1.0.0</span></div>
+    <span class="workspace-label" id="workspace-label">正在加载工作区…</span>
+    <div class="header-actions"><button id="choose-workspace">打开文件夹</button><button id="settings-open">⚙ 模型设置</button></div></header>
+  <main>
+    <aside class="explorer"><div class="section-title">资源管理器 <button id="refresh" title="刷新">↻</button></div>
+      <div class="folder" id="folder">▾ &nbsp; WORKSPACE</div><nav id="files"></nav>
+      <div class="explorer-footer"><span class="dot"></span> 工作区已连接<br><small>文件读写限定在此目录</small></div>
+    </aside>
+    <section class="editor-pane">
+      <div class="editor-tabs"><div class="active-tab" id="filename">欢迎</div><span id="file-meta"></span><button id="save-file" disabled>保存</button></div>
+      <div class="breadcrumb" id="breadcrumb">Little Cursor / 开始使用</div>
+      <div class="welcome" id="welcome"><div class="welcome-mark">↗</div><h1>把想法，写成代码。</h1><p>打开一个文件，或在右侧描述你的编程任务。</p><div class="welcome-line"></div><p class="muted">先理解代码，再精确修改。<br>每一步操作，都有迹可循。</p></div>
+      <div id="code-area" hidden><div id="line-numbers"></div><textarea id="editor" spellcheck="false" aria-label="代码编辑器"></textarea></div>
+      <div id="image-area" hidden></div>
+      <div class="editor-footer"><span id="cursor-position">Ln 1, Col 1</span><span>UTF-8 &nbsp; · &nbsp; Python / Text</span></div>
+    </section>
+    <section class="chat-pane"><div class="section-title">智能体 <div><span id="mode-badge" class="badge">离线验收</span><button id="new-chat" title="新会话">＋</button></div></div>
+      <div id="timeline"><div class="intro"><div class="intro-icon">✳</div><h2>一起完成下一个任务</h2><p>我可以阅读代码、修改文件和运行测试。<br>修改与命令会先交给你确认。</p><div class="chips"><button data-task="修复 mean 对空列表的处理，并运行测试">修复示例中的 mean 函数 <span>↗</span></button><button data-task="演示一次 edit 失败与恢复">查看失败与恢复 <span>↗</span></button><button data-task="调用 MCP 获取作业验收清单">调用外部 MCP 工具 <span>↗</span></button><button data-task="测试中断">测试长任务中断 <span>↗</span></button></div><p class="demo-note">当前为离线固定脚本。真实编程任务请在设置中配置模型和 API Key。</p></div></div>
+      <div class="composer-wrap"><div id="run-status">就绪</div><div class="composer"><textarea id="prompt" placeholder="描述你的任务…" rows="3" aria-label="编程任务"></textarea><div class="composer-bottom"><span id="mcp-status">● MCP 按需连接</span><button id="stop" disabled>■ 中断</button><button id="send">发送 ↑</button></div></div><p class="composer-hint">Enter 发送 · Shift + Enter 换行 · 操作前请检查 diff 与命令</p></div>
+    </section>
+  </main>
+  <footer><span><span class="dot"></span> Little Cursor</span><span id="bottom-status">4 个内置工具 &nbsp; · &nbsp; stdio MCP &nbsp; · &nbsp; 本地会话记录</span></footer>
+  <dialog id="settings"><form id="settings-form"><div class="dialog-heading"><h2>模型与连接</h2><button type="button" id="settings-close">×</button></div><p>Key 仅保存在后端内存，关闭应用后清除。</p>
+    <label>运行模式<select id="setting-mode"><option value="demo">离线验收 · 固定脚本</option><option value="live">真实大模型 · 工具调用</option></select></label>
+    <label>API Base URL<input id="setting-url" type="url" placeholder="https://provider.example/v1" required></label>
+    <label>模型名称<input id="setting-model" placeholder="填写服务商支持工具调用的模型名"></label>
+    <label>API Key<input id="setting-key" type="password" autocomplete="off" placeholder="输入 Key（不写入磁盘）"></label>
+    <label class="check"><input id="setting-mcp" type="checkbox">启用外部 MCP server</label>
+    <label>MCP 配置路径（可选）<input id="setting-mcp-path" placeholder="留空使用内置示例 mcp.json"></label>
+    <div class="settings-note">MCP server 和 shell 命令具有本机用户权限。只连接信任的 server；bash 的工作目录不是操作系统沙箱。</div>
+    <button type="submit" class="primary">保存设置</button><div id="settings-message"></div>
+  </form></dialog>
+  <div id="toast" role="status"></div><script src="app.js?token=__SESSION_TOKEN__"></script>
+</body></html>

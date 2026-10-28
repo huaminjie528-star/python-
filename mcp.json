@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "course": {
+      "command": "${PYTHON}",
+      "args": ["${APP_ROOT}/examples/mcp_server.py"]
+    }
+  }
+}
