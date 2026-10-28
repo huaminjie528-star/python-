@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+.venv/
+.local-data/
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+.DS_Store
+.agent/
+*.egg-info/
+release/
