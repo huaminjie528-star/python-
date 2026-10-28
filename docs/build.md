@@ -14,6 +14,6 @@ bash scripts/build_macos.sh
 
 PyInstaller 生成本地 ad-hoc 签名，不含 Apple Developer ID，也未公证。下载到其他电脑后可能受到 Gatekeeper 限制；正式分发需要自己的开发者证书、codesign 和 notarytool 流程。本次只声明本机可打开，不声明经过其他电脑或 Windows/Linux 验收。
 
-GitHub Actions 中 `check.yml` 执行测试。`release.yml` 在推送版本 tag 时构建并附加 DMG。仓库须允许 Actions 写入 contents，工作流发布只能在代码上传后运行。若构建环境缺少软件包或受限，应查 Actions 日志，不要把空 Release 当成安装包完成。
+GitHub Actions 中 `check.yml` 执行测试。`release.yml` 在推送版本 tag 时构建 DMG，保存为名为 `LittleCursor-macOS-CI-unverified` 的 Actions 构建产物。通过本机验收后再手动附加到 Release，工作流不自动覆盖已发布的验收包。若构建环境缺少软件包或受限，应查 Actions 日志，不要把空 Release 当成安装包完成。
 
 发布材料包括源码、`report.md`、`docs/trace.md`、截图和安装包。真实课堂演示仍须使用自己的 Key 与任意新文件完成老师现场需求。

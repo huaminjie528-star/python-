@@ -15,7 +15,7 @@ Release 指向代码提交 `c8afabe6e731df1d860da1764c76fe355eaa2ab4`，不是�
 c17196e27a8d04a9d40e8e656da46b112c5dc10c8e2ebfbb4b2c51119bfd2c33  demo.mp4
 ```
 
-[源码提交的 GitHub Actions 测试](https://github.com/huaminjie528-star/python-/actions/runs/40672683566)已通过。标签触发的重复打包任务已主动取消，以保留经过本机安装验收的附件，不让 CI 覆盖它；这不代表该构建失败，也不代表云端包已经验收。
+[源码提交的 GitHub Actions 测试](https://github.com/huaminjie528-star/python-/actions/runs/40672683566)已通过。标签触发的重复打包任务在取消完成前上传了云端包，随后已将其改名为 `LittleCursor-1.0.0-macOS-CI-unverified.dmg`，作为未验收的构建参考，并重新上传本机验收版至原下载地址。上面的校验值只对应本机验收版和视频。main 分支已修改工作流：后续云端构建仅保存 Actions 构建产物，不自动覆盖 Release 附件。
 
 提交前还需要本人完成：
 
