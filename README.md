@@ -2,6 +2,8 @@
 
 一个用 Python 编写的桌面编程智能体。左侧浏览文件，中间查看和编辑代码，右侧与模型对话、查看工具结果、审批 diff 与命令。
 
+v1.0.1 增加 DeepSeek 官方接口兼容和更明确的 API 错误提示，操作见 [DeepSeek 接入说明](docs/deepseek.md)。先使用自己的 Key 验证真实连接，再做现场任务。此更新已经通过 21 项自动测试，其中 DeepSeek 多轮工具调用使用模拟接口验收，尚未完成个人账户真实服务验收。
+
 ## 三步启动
 
 1. 从 [Releases](https://github.com/huaminjie528-star/python-/releases) 下载适用于 Apple Silicon 的 `.dmg`，打开磁盘映像，把 **Little Cursor.app** 复制到应用程序文件夹。
