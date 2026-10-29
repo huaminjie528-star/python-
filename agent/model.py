@@ -1,6 +1,9 @@
 """OpenAI-compatible tool calling, plus an explicitly scripted offline fixture."""
 import json
+import errno
 import queue
+import socket
+import ssl
 import threading
 import time
 import urllib.error
@@ -49,6 +52,32 @@ def api_error(exc):
     return f'模型 API HTTP {exc.code}：{hint}'
 
 
+def network_error(exc):
+    """Report actionable network categories without echoing URLs or credentials."""
+    reason = exc.reason if isinstance(exc, urllib.error.URLError) else exc
+    if isinstance(reason, ssl.SSLCertVerificationError):
+        hint = 'HTTPS 证书验证失败，请检查系统时间、受信任证书或代理证书；不要关闭证书验证'
+    elif isinstance(reason, ssl.SSLError):
+        hint = 'TLS 握手失败，请检查网络或代理连接后重试'
+    elif isinstance(reason, socket.gaierror):
+        hint = 'DNS 解析失败，请检查网络、DNS 或代理连接'
+    elif isinstance(reason, (socket.timeout, TimeoutError)):
+        hint = '连接或读取超时，请检查网络或代理；请求可能已到服务端，未自动重发'
+    elif isinstance(reason, ConnectionRefusedError) or getattr(reason, 'errno', None) == errno.ECONNREFUSED:
+        hint = '连接被拒绝，请检查代理软件是否正在运行、系统代理端口是否可用'
+    elif isinstance(reason, (ConnectionResetError, ConnectionAbortedError)):
+        hint = '网络连接被重置或中断，请检查网络及代理的稳定性后重试'
+    else:
+        hint = '无法连接模型服务，请检查网络、系统代理及 API 地址后重试'
+    return '模型网络请求失败：' + hint
+
+
+def open_model_request(req, timeout):
+    # urlopen caches its global opener. Build per request so macOS proxy changes
+    # take effect without restarting the app. Keep normal TLS validation enabled.
+    return urllib.request.build_opener().open(req, timeout=timeout)
+
+
 class ChatModel:
     def __init__(self, settings, cancel):
         self.settings, self.cancel = settings, cancel
@@ -66,13 +95,15 @@ class ChatModel:
         inbox = queue.Queue()
         def request():
             try:
-                with urllib.request.urlopen(req, timeout=45) as response:
+                with open_model_request(req, timeout=45) as response:
                     raw = response.read(4_000_001)
                     if len(raw) > 4_000_000:
                         raise ValueError('模型响应超过 4 MB')
                     inbox.put((True, json.loads(raw)['choices'][0]['message']))
             except urllib.error.HTTPError as exc:
                 inbox.put((False, api_error(exc)))
+            except (urllib.error.URLError, ssl.SSLError, socket.timeout, TimeoutError, ConnectionError) as exc:
+                inbox.put((False, network_error(exc)))
             except Exception as exc:
                 inbox.put((False, f'模型请求失败：{type(exc).__name__}'))
         threading.Thread(target=request, daemon=True).start()

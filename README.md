@@ -2,7 +2,7 @@
 
 一个用 Python 编写的桌面编程智能体。左侧浏览文件，中间查看和编辑代码，右侧与模型对话、查看工具结果、审批 diff 与命令。
 
-v1.0.1 增加 DeepSeek 官方接口兼容和更明确的 API 错误提示，操作见 [DeepSeek 接入说明](docs/deepseek.md)。先使用自己的 Key 验证真实连接，再做现场任务。此更新已经通过 21 项自动测试，其中 DeepSeek 多轮工具调用使用模拟接口验收，尚未完成个人账户真实服务验收。
+v1.0.2 包含 DeepSeek 官方接口兼容、网络错误分类和系统代理刷新，操作见 [DeepSeek 接入说明](docs/deepseek.md)。当前通过 24 项自动测试，真实 DeepSeek 基础对话已返回成功；真实模型文件操作仍待验收。当前最新安装包在本地 `release/LittleCursor-1.0.2-macOS.dmg`，GitHub Release 中的 v1.0.0 不含这些更新。
 
 ## 三步启动
 

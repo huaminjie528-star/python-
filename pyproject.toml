@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "little-cursor"
-version = "1.0.1"
+version = "1.0.2"
 description = "A desktop coding agent with four tools and stdio MCP"
 requires-python = ">=3.9"
 dependencies = ["pywebview==6.1"]

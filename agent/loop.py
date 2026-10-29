@@ -27,7 +27,7 @@ def run(task, root, settings, emit, cancel, approve, resource_root, history=None
             clients, external = connect(settings.get('mcp_config') or resource_root / 'mcp.json', resource_root, cancel)
             schemas += external
             emit('mcp', {'servers': list(clients), 'tools': [s['function']['name'] for s in external]})
-        emit('status', {'text': '离线验收模式（固定脚本，非大模型）' if isinstance(model, DemoModel) else '已连接模型，开始任务'})
+        emit('status', {'text': '离线验收模式（固定脚本，非大模型）' if isinstance(model, DemoModel) else '正在请求模型，等待服务端响应'})
         for step in range(1, min(int(settings.get('max_steps', 20)), 40) + 1):
             if cancel.is_set():
                 raise RuntimeError('任务已中断')
