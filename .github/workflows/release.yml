@@ -16,7 +16,20 @@ jobs:
       - run: .venv/bin/python -m pip install -r requirements-lock.txt
       - run: .venv/bin/python -m unittest discover -s tests -v
       - run: bash scripts/build_macos.sh
+      - name: Generate installer checksums
+        run: |
+          for installer in release/*.dmg; do
+            (cd release && shasum -a 256 "$(basename "$installer")") > "release/SHA256SUMS-${GITHUB_REF_NAME}.txt"
+          done
       - uses: actions/upload-artifact@v4
         with:
           name: LittleCursor-macOS-CI-unverified
-          path: release/*.dmg
+          path: release/*
+      - name: Attach new assets without replacing existing files
+        uses: softprops/action-gh-release@v3
+        with:
+          overwrite_files: false
+          fail_on_unmatched_files: true
+          files: |
+            release/*.dmg
+            release/SHA256SUMS-*.txt
